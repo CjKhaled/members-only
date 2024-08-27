@@ -1,3 +1,11 @@
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        next()
+    } else {
+        res.status(401).json({ msg: "You aren't authorized to view this resource." })
+    }
+}
+
 function isGuest(req, res, next) {
     if (req.isAuthenticated() && req.user.memberstatus === 'guest') {
         next()
@@ -20,4 +28,11 @@ function isAdmin(req, res, next) {
     } else {
         res.status(401).json({ msg: "You aren't authorized to view this resource."})
     }
+}
+
+module.exports = {
+    isLoggedIn,
+    isGuest,
+    isMember,
+    isAdmin
 }

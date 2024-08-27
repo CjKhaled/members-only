@@ -15,6 +15,7 @@ app.set("view engine", "ejs");
 
 // routers
 const indexRouter = require("./routes/indexRouter");
+const messagesRouter = require("./routes/messagesRouter")
 
 // middleware
 app.use(express.urlencoded({ extended: false }));
@@ -29,13 +30,9 @@ app.use(session({
         secure: false // not production
     } }));
 app.use(passport.session());
-app.use((req, res, next) => {
-    console.log("session: ", req.session);
-    console.log("user: ", req.user);
-    next()
-})
 
 app.use("/", indexRouter);
+app.use("/messages", messagesRouter);
 
 // app.use(errorHandler)
 

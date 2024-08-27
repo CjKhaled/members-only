@@ -11,10 +11,6 @@ function getHomePage(req, res) {
     res.render("homepage", { user: req.user })
 }
 
-function getJoinClub(req, res) {
-  res.render("join-club");
-}
-
 function getLogin(req, res) {
   res.render("log-in", { values: {} });
 }
@@ -47,18 +43,6 @@ const postSignUp = [
   },
 ];
 
-const postJoinClub = [
-  validation.validateJoinFormInput,
-  async (req, res, next) => {
-    const errors = validation.validationResult(req);
-
-    // form submission invalid
-    if (!errors.isEmpty()) {
-      return res.status(400).render("join-club", { errors: errors.array() });
-    }
-  },
-];
-
 const postLogin = [
   validation.validateLoginFormInput,
   async (req, res, next) => {
@@ -87,7 +71,7 @@ const postLogin = [
             }
 
             // successful login
-            return res.redirect("/")
+            return res.redirect("/messages")
         })
     })(req, res, next); // needed for custom authenticate
   },
@@ -95,10 +79,8 @@ const postLogin = [
 
 module.exports = {
   getSignUp,
-  getJoinClub,
   getLogin,
   getHomePage,
   postSignUp,
-  postJoinClub,
   postLogin
 };

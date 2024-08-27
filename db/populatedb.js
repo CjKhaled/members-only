@@ -16,9 +16,9 @@ CONSTRAINT unique_user UNIQUE (username)
 );
 
 CREATE TABLE messages (
-id SERIAL PRIMARY KEY,
+user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 title VARCHAR(255),
-text VARCHAR(255),
+text TEXT,
 added TIMESTAMP DEFAULT NOW()
 );
 `;

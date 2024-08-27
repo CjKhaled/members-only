@@ -39,10 +39,20 @@ async function getUserFromID(id) {
   }
 }
 
+async function getMessages() {
+    try {
+        const { rows } = await pool.query("SELECT * FROM messages")
+        return rows
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 
 module.exports = {
   insertUser,
   getUser,
   getUserFromID,
+  getMessages
 };

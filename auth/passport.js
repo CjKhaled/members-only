@@ -28,7 +28,6 @@ passport.use(
 
 // when login successful, give user object
 passport.serializeUser((user, done) => {
-    console.log("from serialize: ", user)
   done(null, user.id);
 });
 
@@ -37,7 +36,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await db.getUserFromID(id);
-    console.log("user from deserialize: ", user)
     done(null, user);
   } catch (err) {
     done(err);
