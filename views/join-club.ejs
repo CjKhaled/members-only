@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Members Only</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body style="padding: 0; margin: 0">
+    <div
+      class="container-fluid d-flex flex-column align-items-center"
+      style="min-height: 100vh"
+    >
+      <h1 class="mb-5 mt-5">
+        To become a member, you must enter the secret passcode.
+      </h1>
+      <%- include('./partials/errors.ejs') %>
+      <form action="/join-club" method="post" id="join-club" novalidate>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="passcode"
+            name="passcode"
+            placeholder="Pass Code"
+            minlength="1"
+            maxlength="10"
+            required
+          />
+          <label for="passcode">Secret Passcode</label>
+          <div class="invalid-feedback">Must provide passcode.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
+
+<script>
+  const joinForm = document.querySelector("form#join-club");
+
+  joinForm.addEventListener("submit", (e) => {
+    if (!joinForm.checkValidity()) {
+      e.preventDefault();
+    }
+
+    joinForm.classList.add("was-validated");
+  });
+</script>

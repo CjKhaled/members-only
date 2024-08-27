@@ -17,9 +17,24 @@ app.set("view engine", "ejs");
 const indexRouter = require("./routes/indexRouter");
 
 // middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: "psh", resave: false, saveUninitialized: false }));
+app.use(express.urlencoded({ extended: false }));
+app.use(session({ 
+    secret: "psh", 
+    resave: false, 
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: false // not production
+    } }));
 app.use(passport.session());
+app.use((req, res, next) => {
+    console.log("session: ", req.session);
+    console.log("user: ", req.user);
+    next()
+})
+
 app.use("/", indexRouter);
 
 // app.use(errorHandler)

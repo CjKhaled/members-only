@@ -9,6 +9,15 @@ async function hashPassword(password) {
   }
 }
 
+async function compareHashes(givenPassword, storedPassword) {
+  try {
+    return bycrpt.compare(givenPassword, storedPassword);
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   hashPassword,
+  compareHashes,
 };
