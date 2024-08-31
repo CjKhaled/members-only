@@ -21,6 +21,10 @@ const passwordError =
   "password must contain an uppercase letter, lowercase letter, and a number";
 const passwordEmptyError = "must provide a password.";
 
+// new message errors
+const titleLengthError = "title must be between 1-30 characters.";
+const messageLengthError = "message must be between 10-300 characters.";
+
 const validateFormInput = [
   body("firstname")
     .trim()
@@ -147,9 +151,22 @@ const validateLoginFormInput = [
     }),
 ];
 
+const validateMessageFormInput = [
+  body("title")
+    .trim()
+    .isLength({ min: 1, max: 30 })
+    .withMessage(titleLengthError),
+
+  body("message")
+    .trim()
+    .isLength({ min: 10, max: 300 })
+    .withMessage(messageLengthError),
+];
+
 module.exports = {
   validateFormInput,
   validationResult,
   validateJoinFormInput,
   validateLoginFormInput,
+  validateMessageFormInput,
 };

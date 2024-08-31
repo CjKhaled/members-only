@@ -56,6 +56,14 @@ async function upgradeGuest(id) {
   }
 }
 
+async function addMessage(id, title, message) {
+  try {
+    await pool.query("INSERT INTO messages (user_id, title, text) VALUES ($1, $2, $3)", [id, title, message])
+  } catch (err) {
+    throw err;
+  }
+}
+
 
 
 module.exports = {
@@ -63,5 +71,6 @@ module.exports = {
   getUser,
   getUserFromID,
   getMessages,
-  upgradeGuest
+  upgradeGuest,
+  addMessage
 };

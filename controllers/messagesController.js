@@ -16,17 +16,26 @@ const getHomePage = [
   },
 ];
 
-function getJoinClub(req, res) {
+const getJoinClub = [
+  authorize.isLoggedIn, 
+  (req, res) => {
   // catch people that are already authorized
-  console.log(req.user.memberstatus)
-  if (req.user.memberstatus == "member") {
-    res.render('has-already')
-  } else if (req.user.memberstatus == "admin") {
-    res.render('has-already')
-  } else {
-    res.render("join-club");
-  }  
-}
+    if (req.user.memberstatus == "member") {
+      res.render('has-already')
+    } else if (req.user.memberstatus == "admin") {
+      res.render('has-already')
+    } else {
+      res.render("join-club");
+    }  
+  }
+]
+
+const getMessageForm = [
+  authorize.isLoggedIn,
+  (req, res) => {
+    res.render("new-message")
+  }
+]
 
 const postJoinClub = [
   validation.validateJoinFormInput,
@@ -44,8 +53,28 @@ const postJoinClub = [
   },
 ];
 
+const postMessageForm = [
+  validation.validateMessageFormInput,
+  async (req, res) => {
+    const errors = validation.validationResult(req)
+
+    // form invalid
+    if (!errors.isEmpty()) {
+      return res.status(400).render("new-message", { errors: errors.array() })
+    }
+
+    // add new message to database
+    const id = req.user.id
+    const { title, message } = req.body
+    await db.addMessage(id, title, message)
+    res.redirect("/messages")
+  }
+]
+
 module.exports = {
   getHomePage,
   getJoinClub,
+  getMessageForm,
   postJoinClub,
+  postMessageForm
 };
