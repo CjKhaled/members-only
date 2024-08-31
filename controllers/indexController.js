@@ -8,7 +8,7 @@ function getSignUp(req, res) {
 }
 
 function getHomePage(req, res) {
-    res.render("homepage", { user: req.user })
+  res.render("homepage", { user: req.user });
 }
 
 function getLogin(req, res) {
@@ -36,7 +36,27 @@ const postSignUp = [
         req.body.lastname,
         hashedPassword
       );
-      res.send("User added.");
+
+      // login user after signing up
+      passport.authenticate("local", (err, user, info) => {
+        if (err) {
+          return next(err);
+        }
+
+        if (!user) {
+          return res
+            .status(400)
+            .render("log-in", { errors: [{ msg: info.message }] });
+        }
+
+        req.login(user, (err) => {
+          if (err) {
+            return next(err);
+          }
+
+          return res.redirect("/messages");
+        });
+      })(req, res, next);
     } catch (err) {
       next(err);
     }
@@ -50,29 +70,29 @@ const postLogin = [
 
     // form submission invalid
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .render("log-in", { errors: errors.array() });
+      return res.status(400).render("log-in", { errors: errors.array() });
     }
 
     passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+
+      // authentication failed
+      if (!user) {
+        return res
+          .status(400)
+          .render("log-in", { errors: [{ msg: info.message }] });
+      }
+
+      req.login(user, (err) => {
         if (err) {
-            return next(err)
+          return next(err);
         }
 
-        // authentication failed
-        if (!user) {
-            return res.status(400).render("log-in", { errors: [{ msg: info.message }]})
-        }
-
-        req.login(user, (err) => {
-            if (err) {
-                return next(err)
-            }
-
-            // successful login
-            return res.redirect("/messages")
-        })
+        // successful login
+        return res.redirect("/messages");
+      });
     })(req, res, next); // needed for custom authenticate
   },
 ];
@@ -82,5 +102,5 @@ module.exports = {
   getLogin,
   getHomePage,
   postSignUp,
-  postLogin
+  postLogin,
 };
