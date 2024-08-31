@@ -26,10 +26,10 @@
         To become a member, you must enter the secret passcode.
       </h1>
       <%- include('./partials/errors.ejs') %>
-      <form action="/join-club" method="post" id="join-club" novalidate>
+      <form action="/messages/join-club" method="post" id="join-club" novalidate>
         <div class="form-floating mb-3">
           <input
-            type="text"
+            type="password"
             class="form-control"
             id="passcode"
             name="passcode"

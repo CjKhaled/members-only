@@ -23,10 +23,10 @@
             <a href="/messages" class="navbar-brand">Members Only</a>
             <div class="navbar-nav d-flex flex-row align-items-center">
                 <span class="navbar-text me-3">
-                    Welcome, <%= user.firstname %>!
+                  <%= permission == 'guest' ? "Guest" : "Member" %>
                 </span>
                 <ul class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a class="text-decoration-none" href="/meessages/join-club">Join club</a></li>
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="/messages/join-club">Join club</a></li>
                     <li class="breadcrumb-item"><a class="text-decoration-none" href="">Become an admin</a></li>
                     <li class="breadcrumb-item"><a class="text-decoration-none" href="">Log out</a></li>
                 </ul>
@@ -34,16 +34,30 @@
         </div>
     </nav>
     <div class="container-fluid">
-        <h1 class="my-5 text-center">Join Our Club!</h1>
-        <% messages.forEach((message) => { %>
-            <div class="card mb-5">
-                <div class="card-body">
-                    <p><%= message.title %></p>
-                    <p><%= message.text %></p>
-                    <p><%= message.added %></p>
-                </div>
-            </div>
-        <% }) %>
+        <h1 class="my-5 text-center">Welcome, <%= user.firstname %>!</h1>
+        <h2 class="my-5 text-center"><%= permission == 'guest' ? "Join Our Club Guest!" : "Nice To Have You Back Member!" %></h2>
+        <div class="container-fluid p-5 d-flex flex-row justify-content-between">
+          <button type="button" class="btn btn-primary position-relative">
+            Messages
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <%= count %>
+              <span class="visually-hidden">unread messages</span>
+            </span>
+          </button>
+          <a class="text-decoration-none" href="">Create new message</a>
+        </div>
+        <div class="container-fluid p-5">
+          <% messages.forEach((message) => { %>
+              <div class="card mb-5">
+                  <div class="card-body p-0">
+                      <h3 class="card-header mb-3">User: <%= message.firstname %> <%= message.lastname %></h3>
+                      <h3 class="card-title p-3"><%= message.title %></h3>
+                      <span class="card-subtitle p-3 mb-2"><strong>Uploaded at:</strong> <%= message.added %></span>
+                      <p class="card-text p-3 mb-3"><strong>Message:</strong> <%= message.text %></p>
+                  </div>
+              </div>
+          <% }) %>
+        </div>
     </div>
   </body>
 </html>

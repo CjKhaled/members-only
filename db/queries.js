@@ -41,11 +41,19 @@ async function getUserFromID(id) {
 
 async function getMessages() {
     try {
-        const { rows } = await pool.query("SELECT * FROM messages")
+        const { rows } = await pool.query("SELECT firstname, lastname, title, text, added FROM messages INNER JOIN users ON messages.user_id = users.id")
         return rows
     } catch (err) {
         throw err;
     }
+}
+
+async function upgradeGuest(id) {
+  try {
+    await pool.query("UPDATE users SET memberstatus = 'member' WHERE id = $1", [id])
+  } catch (err) {
+    throw err;
+  }
 }
 
 
@@ -54,5 +62,6 @@ module.exports = {
   insertUser,
   getUser,
   getUserFromID,
-  getMessages
+  getMessages,
+  upgradeGuest
 };
